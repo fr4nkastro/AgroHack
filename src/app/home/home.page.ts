@@ -5,7 +5,28 @@ import { Stats } from '../interfaces/Stats';
 import { AlertController } from '@ionic/angular';
 import { AppData } from '../AppData';
 import { interval } from 'rxjs';
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { AngularFireDatabase } from '@angular/fire/database';
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDZaBLHjOvgsjCPc5dm3GupmrxFsr1ssyY",
+  authDomain: "ioniclot.firebaseapp.com",
+  projectId: "ioniclot",
+  storageBucket: "ioniclot.appspot.com",
+  messagingSenderId: "319580632096",
+  appId: "1:319580632096:web:3e9bb389e9d5c7dd1f7845",
+  measurementId: "G-YN4SR9FDQM"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 
 
