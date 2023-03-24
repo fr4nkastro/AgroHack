@@ -8,6 +8,8 @@ import { interval } from 'rxjs';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { Firestore, collectionData, collection, Timestamp } from '@angular/fire/firestore';
+import { inject } from '@angular/core';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -32,6 +34,12 @@ const analytics = getAnalytics(app);
 
 const source$ =interval(3000);
 
+interface Item {
+  value:number,
+  timeStamp: Timestamp
+
+};
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -39,6 +47,9 @@ const source$ =interval(3000);
 })
 
 export class HomePage implements OnInit, AfterViewInit  {
+  firestore: Firestore = inject(Firestore)
+  items$: Observable<any[]>;
+  itemsFarm$: Observable<any[]>;
   status : AppData;
   server='192.168.1.17'
   debugFlag:boolean = false;
@@ -56,7 +67,14 @@ export class HomePage implements OnInit, AfterViewInit  {
   humedadMaxima:number;
   automatic:boolean;
 
-  constructor(private serviceArduino: SArduinoService, private alertController : AlertController) {}
+  constructor(private serviceArduino: SArduinoService, private alertController : AlertController) {
+    const aCollection = collection(this.firestore, 'granjas/granja1/sensores/caudal/registros');
+    this.items$ = collectionData(aCollection);
+    this.items$.forEach(element => {
+      console.log(element[0].value);
+    }); 
+    
+  }
  
 
   ngOnInit(): void {
