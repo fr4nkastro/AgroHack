@@ -89,14 +89,14 @@ void checkSerialData(){
      serialInput = message;
 
      //Print the message (or do other things)
-    Serial.println("Input: "+serialInput);
+    // Serial.println("Input: "+serialInput);
     indexTerminator = serialInput.indexOf(":");
       if(indexTerminator != -1){
         //Extraer comando
         currentCommand= serialInput.substring(0,indexTerminator);
         value=serialInput.substring(indexTerminator+ 1,serialInput.length()-1);
-        Serial.println("Command: " +currentCommand);   
-        Serial.println("Value: "+value);
+        // Serial.println("Command: " +currentCommand);   
+        // Serial.println("Value: "+value);
       }
 
      //Reset for the next message

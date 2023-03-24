@@ -8,7 +8,7 @@ const unsigned int MAX_MESSAGE_LENGTH =10;
 const char* ssid     = "2";
 const char* password = "12345678";
 
-// const char* ssid     = "InprosaMiraflores2.4GHz";
+// const char* ssid     = "InprosaMiraflores 5g";
 // const char* password = "InprosaM02";
 
 const char* hostname = "ESP8266_1";
