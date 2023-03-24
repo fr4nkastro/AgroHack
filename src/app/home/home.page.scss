@@ -1,0 +1,96 @@
+.custom-content{
+  margin-top: 7vh;
+  margin-left: 5vw;
+  margin-right: 0vw;
+
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.item-sensor{
+  margin-top: 2vh;
+}
+
+.toggleFan {
+  --handle-background-checked: #fff url(/assets/img/fan.png) no-repeat center / contain;
+}
+
+.toggleFan2 {
+  --handle-background-checked: #fff url(/assets/img/fan.png) no-repeat center / contain;
+}
+
+#tooglePump {
+  --handle-background-checked: rgba(246, 254, 16, 0.936) url(/assets/icon/bulb-outline.svg) no-repeat center / contain;
+}
+
+
+label {
+  position: relative;
+  width: 50vw;
+  height: 55px;
+  background: #212121;
+  border-radius: 50px;
+}
+label input {
+  appearance: none;
+}
+
+label span {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  border: 4px solid #212121;
+  border-radius: 50%;
+  background: #333;
+  transition: 0.5s;
+
+}
+
+label input:checked ~ span {
+  left: 7vw;
+}
+
+label span ion-icon {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 2em;
+  transition: 0.5s;
+}
+
+label input:checked ~ span ion-icon {
+  color: rgba(255, 255, 255, 1);
+  filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 7px #fff)
+  drop-shadow(0 0 10px #fff);
+}
+
+.statusSystem{
+  margin-left: 2vw;
+  display: flex;
+  
+}
+
+
+.sub-container{
+  display: flex;
+  flex-flow: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.card-sensors{
+  margin-top: 13vh;
+  max-width: 300vw;
+  min-width: 25vw;
+
+}
+
+.sensores-humedad{
+  margin-top: 2%;
+  margin-left: 15%;
+  margin-right: 15%;
+}
