@@ -1,3 +1,4 @@
+
 import { AfterViewInit, Component, OnInit, Inject, inject  } from '@angular/core';
 import {SArduinoService} from '../services/s-arduino.service'
 import { Observable } from 'rxjs';
@@ -5,7 +6,7 @@ import { Stats } from '../interfaces/Stats';
 import { AlertController } from '@ionic/angular';
 import { AppData } from '../AppData';
 import { interval } from 'rxjs';
-// Import the functions you need from the SDKs you need
+import { Chart } from 'chart.js';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { Firestore } from '@angular/fire/firestore';
@@ -41,6 +42,7 @@ const source$ =interval(3000);
 })
 
 export class HomePage implements OnInit, AfterViewInit  {
+  chart: any;
   firestore: Firestore = inject(Firestore);
   status : AppData;
   server='192.168.1.17'
@@ -70,8 +72,35 @@ export class HomePage implements OnInit, AfterViewInit  {
             }
           });
     })  }
- 
-
+    createChart(){
+  
+      this.chart = new Chart("MyChart", {
+        type: 'line', //this denotes tha type of chart
+  
+        data: {// values on X-Axis
+          labels: ['2022-05-10', '2022-05-11', '2022-05-12','2022-05-13',
+                   '2022-05-14', '2022-05-15', '2022-05-16','2022-05-17', ], 
+           datasets: [
+            {
+              label: "Sales",
+              data: ['467','576', '572', '79', '92',
+                   '574', '573', '576'],
+              backgroundColor: 'blue'
+            },
+            {
+              label: "Profit",
+              data: ['542', '542', '536', '327', '17',
+                     '0.00', '538', '541'],
+              backgroundColor: 'limegreen'
+            }  
+          ]
+        },
+        options: {
+          aspectRatio:2.5
+        }
+        
+      });
+    }
   ngOnInit(): void {
     this.status=null;
     this.tipoRiego='terrestre';
@@ -80,7 +109,8 @@ export class HomePage implements OnInit, AfterViewInit  {
     this.timeEnd='';
     this.temperaturaStart=0;
     this.temperaturaEnd=0;
-    
+    this.createChart();
+
   } 
 
   ngAfterViewInit(){
