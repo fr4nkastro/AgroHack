@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit  } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Inject, inject  } from '@angular/core';
 import {SArduinoService} from '../services/s-arduino.service'
 import { Observable } from 'rxjs';
 import { Stats } from '../interfaces/Stats';
@@ -8,6 +8,8 @@ import { interval } from 'rxjs';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, collectionGroup, onSnapshot, query, QuerySnapshot } from 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -39,6 +41,7 @@ const source$ =interval(3000);
 })
 
 export class HomePage implements OnInit, AfterViewInit  {
+  firestore: Firestore = inject(Firestore);
   status : AppData;
   server='192.168.1.17'
   debugFlag:boolean = false;
@@ -56,7 +59,17 @@ export class HomePage implements OnInit, AfterViewInit  {
   humedadMaxima:number;
   automatic:boolean;
 
-  constructor(private serviceArduino: SArduinoService, private alertController : AlertController) {}
+
+  constructor(private serviceArduino: SArduinoService, private alertController : AlertController) {
+    onSnapshot(collectionGroup(this.firestore,'regTemperatura'),QuerySnapshot => {
+          QuerySnapshot.forEach(element => {
+            console.log(element.data());
+            const dataFormated= element.data() as {value: number, timeStamp: string, dateStamp: string};
+            if( dataFormated.timeStamp != undefined){
+              console.log('time:',dataFormated.timeStamp.substring(0,7));
+            }
+          });
+    })  }
  
 
   ngOnInit(): void {
@@ -168,6 +181,7 @@ export class HomePage implements OnInit, AfterViewInit  {
       buttons: [ {text:'Cancel'},{text: 'OK',   handler: data  => {
         if(data[0]!=''){
           this.server= data[0]; 
+
         }
           
         this.serviceArduino.getStatus(this.server, '0').subscribe((_data)=>{this.status = new AppData(_data);
@@ -276,6 +290,7 @@ export class HomePage implements OnInit, AfterViewInit  {
       ]
     });
   await alert.present();
+  await addDoc(collection(this.firestore, 'granjas/granja1/sensores/temperatura/regTemperatura'),{value: 100, timeStamp: new Date().toTimeString(), dateStamp: new Date().toDateString()});
   }
 
   async presentAlertTipoRiego() {
