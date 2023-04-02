@@ -1,28 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Chart, ChartConfiguration, ChartItem, registerables} from 'node_modules/chart.js'
-const data = {
-  labels: ['January','February','March','April','May'],
-  datasets: [{
-    label: 'My First dataset',
-    backgroundColor: 'rgb(255, 99, 132)',
-    borderColor: 'rgb(255, 99, 132)',
-    data: [10, 5, 2, 20, 30, 45],
-  }]
-};
-const options = {
-  scales: {
-    y: {
-      beginAtZero: true,
-      display: false
-    }
-  }
-}
-
-const config: ChartConfiguration = {
-  type: 'line',
-  data: data,
-  options: options
-}
+import Chart from 'chart.js/auto';
 
 
 @Component({
@@ -35,12 +12,31 @@ export class ChartComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    const chartItem: ChartItem = document.getElementById('my-chart') as ChartItem
-    new Chart(chartItem, config)
-    this.createChart()
+    this.dibujarGrafico();
   }
-  createChart(): void {
-    Chart.register(...registerables);
+  dibujarGrafico(): void {
+    const canvas = document.getElementById('grafico-lineal') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+    const data = {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+      datasets: [{
+        label: 'Datos',
+        data: [1, 2, 3, 4, 5],
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+      }]
+    };
+
+    const options = {};
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: data,
+      options: options
+    });
   }
+
+
+
 
 }

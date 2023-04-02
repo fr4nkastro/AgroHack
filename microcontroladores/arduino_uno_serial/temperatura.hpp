@@ -45,6 +45,6 @@ void updateTemperature(){
   Serial.print("T:");
   Serial.print(temp);
   Serial.println();
-  // delay(100);                
+  delay(500);                
 }
 
