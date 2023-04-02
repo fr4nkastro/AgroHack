@@ -9,8 +9,10 @@ import { interval } from 'rxjs';
 import { Chart } from 'chart.js';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+
 import { Firestore } from '@angular/fire/firestore';
 import { addDoc, collection, collectionGroup, onSnapshot, query, QuerySnapshot } from 'firebase/firestore';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -35,6 +37,12 @@ const analytics = getAnalytics(app);
 
 const source$ =interval(3000);
 
+interface Item {
+  value:number,
+  timeStamp: Timestamp
+
+};
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -42,8 +50,10 @@ const source$ =interval(3000);
 })
 
 export class HomePage implements OnInit, AfterViewInit  {
+
   chart: any;
   firestore: Firestore = inject(Firestore);
+
   status : AppData;
   server='192.168.1.17'
   debugFlag:boolean = false;
@@ -60,7 +70,6 @@ export class HomePage implements OnInit, AfterViewInit  {
   humedadMinima:number;
   humedadMaxima:number;
   automatic:boolean;
-
 
   constructor(private serviceArduino: SArduinoService, private alertController : AlertController) {
     onSnapshot(collectionGroup(this.firestore,'regTemperatura'),QuerySnapshot => {
