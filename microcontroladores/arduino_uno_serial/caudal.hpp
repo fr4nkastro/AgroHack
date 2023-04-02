@@ -42,6 +42,6 @@ void updateCaudalVolumen(){
   Serial.print ("V:");
   Serial.print (volumen,3); 
   Serial.println();
-  delay(1000);
+  delay(500);
 
 }

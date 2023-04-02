@@ -1,15 +1,18 @@
-import { AfterViewInit, Component, OnInit  } from '@angular/core';
+
+import { AfterViewInit, Component, OnInit, Inject, inject  } from '@angular/core';
 import {SArduinoService} from '../services/s-arduino.service'
 import { Observable } from 'rxjs';
 import { Stats } from '../interfaces/Stats';
 import { AlertController } from '@ionic/angular';
 import { AppData } from '../AppData';
 import { interval } from 'rxjs';
-// Import the functions you need from the SDKs you need
+import { Chart } from 'chart.js';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { Firestore, collectionData, collection, Timestamp } from '@angular/fire/firestore';
-import { inject } from '@angular/core';
+
+import { Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, collectionGroup, onSnapshot, query, QuerySnapshot } from 'firebase/firestore';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -47,9 +50,10 @@ interface Item {
 })
 
 export class HomePage implements OnInit, AfterViewInit  {
-  firestore: Firestore = inject(Firestore)
-  items$: Observable<any[]>;
-  itemsFarm$: Observable<any[]>;
+
+  chart: any;
+  firestore: Firestore = inject(Firestore);
+
   status : AppData;
   server='192.168.1.17'
   debugFlag:boolean = false;
@@ -68,15 +72,44 @@ export class HomePage implements OnInit, AfterViewInit  {
   automatic:boolean;
 
   constructor(private serviceArduino: SArduinoService, private alertController : AlertController) {
-    const aCollection = collection(this.firestore, 'granjas/granja1/sensores/caudal/registros');
-    this.items$ = collectionData(aCollection);
-    this.items$.forEach(element => {
-      console.log(element[0].value);
-    }); 
-    
-  }
- 
-
+    onSnapshot(collectionGroup(this.firestore,'regTemperatura'),QuerySnapshot => {
+          QuerySnapshot.forEach(element => {
+            console.log(element.data());
+            const dataFormated= element.data() as {value: number, timeStamp: string, dateStamp: string};
+            if( dataFormated.timeStamp != undefined){
+              console.log('time:',dataFormated.timeStamp.substring(0,7));
+            }
+          });
+    })  }
+    createChart(){
+  
+      this.chart = new Chart("MyChart", {
+        type: 'line', //this denotes tha type of chart
+  
+        data: {// values on X-Axis
+          labels: ['2022-05-10', '2022-05-11', '2022-05-12','2022-05-13',
+                   '2022-05-14', '2022-05-15', '2022-05-16','2022-05-17', ], 
+           datasets: [
+            {
+              label: "Sales",
+              data: ['467','576', '572', '79', '92',
+                   '574', '573', '576'],
+              backgroundColor: 'blue'
+            },
+            {
+              label: "Profit",
+              data: ['542', '542', '536', '327', '17',
+                     '0.00', '538', '541'],
+              backgroundColor: 'limegreen'
+            }  
+          ]
+        },
+        options: {
+          aspectRatio:2.5
+        }
+        
+      });
+    }
   ngOnInit(): void {
     this.status=null;
     this.tipoRiego='terrestre';
@@ -85,7 +118,8 @@ export class HomePage implements OnInit, AfterViewInit  {
     this.timeEnd='';
     this.temperaturaStart=0;
     this.temperaturaEnd=0;
-    
+    this.createChart();
+
   } 
 
   ngAfterViewInit(){
@@ -186,6 +220,7 @@ export class HomePage implements OnInit, AfterViewInit  {
       buttons: [ {text:'Cancel'},{text: 'OK',   handler: data  => {
         if(data[0]!=''){
           this.server= data[0]; 
+
         }
           
         this.serviceArduino.getStatus(this.server, '0').subscribe((_data)=>{this.status = new AppData(_data);
@@ -294,6 +329,7 @@ export class HomePage implements OnInit, AfterViewInit  {
       ]
     });
   await alert.present();
+  await addDoc(collection(this.firestore, 'granjas/granja1/sensores/temperatura/regTemperatura'),{value: 100, timeStamp: new Date().toTimeString(), dateStamp: new Date().toDateString()});
   }
 
   async presentAlertTipoRiego() {

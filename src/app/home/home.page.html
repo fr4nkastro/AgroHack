@@ -109,11 +109,16 @@
         <ion-label>Volumen : {{this.status.data.volume}} L </ion-label>
       </ion-item>
     </ion-card>
+    <ion-card>
+      <app-chart>
+
+      </app-chart>
+    </ion-card>
   </div>
 
 </div>
 
-<div class="sensores-humedad" *ngIf="this.status!=null" >
+<!-- <div class="sensores-humedad" *ngIf="this.status!=null" >
         <ion-item-divider>
           <ion-label>
             <ion-text color="medium"> Sensor Humedad #1: {{this.status.data.humedad1}}%</ion-text>
@@ -143,7 +148,7 @@
           </ion-avatar>      
           <ion-progress-bar value="{{this.status.data.humedad2-0.1}}" buffer="0.05"></ion-progress-bar>
         </ion-item>
-      </div>
+      </div> -->
 
     <ion-fab vertical="start" horizontal="end" edge slot="fixed">
       <ion-fab-button>
@@ -162,5 +167,7 @@
       </ion-fab-list>
 
     </ion-fab>
+    
 
 </ion-content>
+
