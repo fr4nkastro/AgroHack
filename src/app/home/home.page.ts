@@ -5,6 +5,7 @@ import { AlertController } from '@ionic/angular';
 import { Chart } from 'chart.js';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+
 import { Firestore } from '@angular/fire/firestore';
 import { addDoc, collection, collectionGroup, onSnapshot, query, QuerySnapshot } from 'firebase/firestore';
 import { Queue } from '../interfaces/Queue';
@@ -175,16 +176,16 @@ export class HomePage implements OnInit, AfterViewInit  {
     }
   ngOnInit(): void {
     this.presentAlert();
-    this.timeStart='';
-    this.timeEnd='';
-    this.temperaturaStart=0;
-    this.temperaturaEnd=0;
+    this.timeStart = '';
+    this.timeEnd = '';
+    this.temperaturaStart = 0;
+    this.temperaturaEnd = 0;
     this.createChart();
 
-  } 
+  }
 
-  ngAfterViewInit(){
-    this.toogleButton= document.getElementById("tooglePump");
+  ngAfterViewInit() {
+    this.toogleButton = document.getElementById("tooglePump");
     console.log(this.toogleButton);
 
   }
@@ -196,7 +197,7 @@ export class HomePage implements OnInit, AfterViewInit  {
 
 
 
-  
+
   async presentAlert() {
     const alert = await this.alertController.create({
       header: 'Configuración del Servidor',
@@ -225,10 +226,10 @@ export class HomePage implements OnInit, AfterViewInit  {
       buttons: [{
         text: 'OK',
         handler: (data) => {
-          console.log("Temperatura:" ,data[0], data[1]);
-          if(data[0] !='' && data[1]!=''){
-            this.temperaturaStart= Number(data[0]);
-            this.temperaturaEnd= Number(data[1]);
+          console.log("Temperatura:", data[0], data[1]);
+          if (data[0] != '' && data[1] != '') {
+            this.temperaturaStart = Number(data[0]);
+            this.temperaturaEnd = Number(data[1]);
           }
         },
       },],
@@ -237,7 +238,8 @@ export class HomePage implements OnInit, AfterViewInit  {
           placeholder: 'Minima',
           type: 'number',
         },
-        {placeholder: 'Máxima',
+        {
+          placeholder: 'Máxima',
           type: 'number',
         },
       ],
@@ -246,31 +248,32 @@ export class HomePage implements OnInit, AfterViewInit  {
   }
 
 
- async presentAlertHumidity(){
-  const alert = await this.alertController.create({
-    header: 'Humedad minima y máxima',
-    buttons: [
-      {
-        text: 'OK',
-        handler: (data) => {
-        this.humedadMinima= data[0];
-        this.humedadMaxima= data[1];
-        console.log("Humedad Min/Max:", this.humedadMinima, this.humedadMaxima);
+  async presentAlertHumidity() {
+    const alert = await this.alertController.create({
+      header: 'Humedad minima y máxima',
+      buttons: [
+        {
+          text: 'OK',
+          handler: (data) => {
+            this.humedadMinima = data[0];
+            this.humedadMaxima = data[1];
+            console.log("Humedad Min/Max:", this.humedadMinima, this.humedadMaxima);
+          },
         },
-      },
-    ],
-    inputs: [
-      {
-        placeholder: 'Minima',
-        type: 'number',
-      },
-      {placeholder: 'Máxima',
-        type: 'number',
-      },
-    ],
-  });
+      ],
+      inputs: [
+        {
+          placeholder: 'Minima',
+          type: 'number',
+        },
+        {
+          placeholder: 'Máxima',
+          type: 'number',
+        },
+      ],
+    });
 
-  await alert.present();
+    await alert.present();
 
   }
 
@@ -281,8 +284,8 @@ export class HomePage implements OnInit, AfterViewInit  {
         {
           text: 'OK',
           handler: (data) => {
-            this.timeStart= String(data[0]);
-            this.timeEnd= String(data[1]);
+            this.timeStart = String(data[0]);
+            this.timeEnd = String(data[1]);
           },
         },
       ],
