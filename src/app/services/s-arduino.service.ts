@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Stats } from '../interfaces/Stats';
-import { interval, timer } from 'rxjs';
+// import { interval } from 'rxjs';
+// import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
