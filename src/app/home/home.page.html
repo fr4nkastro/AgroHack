@@ -13,23 +13,14 @@
     </ion-refresher-content>
   </ion-refresher>
   
-  <ion-item-divider *ngIf="this.status!=null">
+  <ion-item-divider *ngIf="this.data!=null">
     <ion-label>
       <ion-text color="medium"> Estado del Sistema</ion-text>
     </ion-label>
   </ion-item-divider>
-  <div class="statusSystem" *ngIf="this.status!=null">
-    <ion-progress-bar *ngIf="!!this.status.data.humedad1" type="indeterminate"></ion-progress-bar>
-    <ion-progress-bar *ngIf="!this.status.data.humedad2"></ion-progress-bar>
-    <label>
-      <input [disabled]="true" [checked]="this._statusSystem" type="checkbox">
-      <span>
-        <ion-icon name="bulb-outline"></ion-icon>
-      </span>
-    </label>
-    
-    <ion-progress-bar *ngIf="!!this.status.data.humedad1" type="indeterminate" reversed="true"></ion-progress-bar>
-    <ion-progress-bar *ngIf="!this.status.data.humedad2"></ion-progress-bar>
+  <div class="statusSystem" *ngIf="this.data!=null">
+    <ion-progress-bar *ngIf="!!this.data.humidity" type="indeterminate" reversed="true"></ion-progress-bar>
+    <ion-progress-bar *ngIf="!this.data.humidity"></ion-progress-bar>
 
   </div>
   
@@ -42,7 +33,7 @@
       </ion-label>
     </ion-item-divider>
     <ion-item>
-      <ion-toggle  [(ngModel)]="this.status.data.pump" id="tooglePump"  (ngModelChange)="requestData('1')" >
+      <ion-toggle  [(ngModel)]="this.status.pump" id="tooglePump"  (ngModelChange)="requestData('pump')" >
         <span>
           <ion-icon name="bulb-outline"></ion-icon>
         </span>
@@ -54,32 +45,32 @@
     </ion-item>
 
     <ion-item>
-      <ion-toggle class="toggleFan" [(ngModel)]="this.status.data.fan1" (ngModelChange)="requestData('2')" ></ion-toggle>
+      <ion-toggle class="toggleFan" [(ngModel)]="this.status.fanIn" (ngModelChange)="requestData('fanIn')" ></ion-toggle>
       <ion-thumbnail slot="start">
         <img src="../assets/img/fan.png">
       </ion-thumbnail>
-      <ion-label>Ventiladora #1</ion-label>
+      <ion-label>Ventiladora In</ion-label>
     </ion-item>
 
 
     <ion-item>
-      <ion-toggle class="toggleFan"  [(ngModel)]="this.status.data.fan2" (ngModelChange)="requestData('3')" ></ion-toggle>
+      <ion-toggle class="toggleFan"  [(ngModel)]="this.status.fanOut" (ngModelChange)="requestData('fanOut')" ></ion-toggle>
       <ion-thumbnail slot="start">
         <img src="../assets/img/fan.png">
       </ion-thumbnail>
-      <ion-label>Ventiladora #2</ion-label>
+      <ion-label>Ventiladora Out</ion-label>
     </ion-item>
 
     <ion-item>
-      <ion-toggle [(ngModel)]="this.status.data.aereo" (ngModelChange)="requestData('6')" ></ion-toggle>
+      <ion-toggle [(ngModel)]="this.status.valve1" (ngModelChange)="requestData('valve1')" ></ion-toggle>
       <ion-thumbnail slot="start">
-        <img src="../assets/img/riegoAereo.png">
+        <img src="../assets/img/riegoTerrestre.png">
       </ion-thumbnail>
-      <ion-label>Riego Aéreo</ion-label>
+      <ion-label>Torre 1</ion-label>
     </ion-item>
 
     <ion-item>
-      <ion-toggle  [(ngModel)]="this.status.data.terrestre" (ngModelChange)="requestData('5')" ></ion-toggle>
+      <ion-toggle  [(ngModel)]="this.status.valve2" (ngModelChange)="requestData('valve2')" ></ion-toggle>
       <ion-thumbnail slot="start">
         <img src="../assets/img/riegoTerrestre.png">
       </ion-thumbnail>
@@ -94,19 +85,19 @@
         <ion-thumbnail slot="start">
           <img src="../assets/img/temperatura.png">
         </ion-thumbnail>
-        <ion-label>Temperatura : {{this.status.data.temperatura}}°C </ion-label>
+        <ion-label>Temperatura : {{this.status.temperature}}°C </ion-label>
       </ion-item>
       <ion-item>
         <ion-thumbnail slot="start">
           <img src="../assets/img/caudal.png">
         </ion-thumbnail>
-        <ion-label>Caudal : {{this.status.data.caudal}} L/m </ion-label>
+        <ion-label>Caudal : {{this.status.caudal}} L/m </ion-label>
       </ion-item>
       <ion-item>
         <ion-thumbnail slot="start">
           <img src="../assets/img/litro.png">
         </ion-thumbnail>
-        <ion-label>Volumen : {{this.status.data.volume}} L </ion-label>
+        <ion-label>Volumen : {{this.status.volume}} L </ion-label>
       </ion-item>
     </ion-card>
     <ion-card>
@@ -155,7 +146,7 @@
         <ion-icon name="grid-outline"></ion-icon>
       </ion-fab-button>
       <ion-fab-list side="bottom">
-        <ion-fab-button (click)="powerOffSystem()"><ion-icon name="power-outline"></ion-icon></ion-fab-button>
+        <ion-fab-button (click)="stopInterval()"><ion-icon name="power-outline"></ion-icon></ion-fab-button>
         <ion-fab-button (click)="presentAlert()" ><ion-icon name="wifi-outline"></ion-icon></ion-fab-button>
         <ion-fab-button (click)="presentAlertTemperature()" ><ion-icon name="thermometer-outline"></ion-icon></ion-fab-button>
         <ion-fab-button (click)="presentAlertHumidity()"><ion-icon name="rainy-outline"></ion-icon></ion-fab-button>
